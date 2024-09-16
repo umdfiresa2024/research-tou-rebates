@@ -87,21 +87,25 @@ Answer:
 
 Answer:
 
+## Question 9: What is the impact of the treatment effect once fixed effects are included?
+
+Answer:
+
 # Questions for Week 5
 
-## Question 9: In a difference-in-differences (DiD) model, what is the treatment GROUP?
+## Question 10: In a difference-in-differences (DiD) model, what is the treatment GROUP?
 
 Answer:
 
-## Question 10: In a DiD model, what are the control groups?
+## Question 11: In a DiD model, what are the control groups?
 
 Answer:
 
-## Question 11: What is the DiD regression equation that will answer your research question?
+## Question 12: What is the DiD regression equation that will answer your research question?
 
-## Question 12: Run your DiD regressions below. What are the results of the DiD regression? 
+## Question 13: Run your DiD regressions below. What are the results of the DiD regression?
 
-## Question 13: What are the next steps of your research?
+## Question 14: What are the next steps of your research?
 
 Step 9: Change the document format to gfm
 
