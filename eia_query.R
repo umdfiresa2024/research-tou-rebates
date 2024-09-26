@@ -18,7 +18,7 @@ url1<-"https://api.eia.gov/v2/electricity/rto/region-sub-ba-data/data/?frequency
 # date = YYYY-MM-DD
 url2<- "T00&end="
 # date = YYYY-MM-DD
-url3<-"T23&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&"
+url3<-"T01&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&"
 api<-"api_key=5Bh3PIQEvXubBUiu4tCV5IN6Kv2AS885S9GPhpBh"
 
 # link = url1 + date + url2 + date + url3 + api
@@ -27,6 +27,7 @@ years<-str_pad(2019:2023, width=4, side="left", pad="0")
 months<-str_pad(1:12, width=2, side="left", pad="0")
 days_per_month<-c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
+#test query
 y<-1
 m<-1
 d<-1
