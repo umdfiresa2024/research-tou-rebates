@@ -18,7 +18,7 @@ url1<-"https://api.eia.gov/v2/electricity/rto/region-sub-ba-data/data/?frequency
 # date = YYYY-MM-DD
 url2<- "T00&end="
 # date = YYYY-MM-DD
-url3<-"T01&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&"
+url3<-"T23&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000&"
 api<-"api_key=5Bh3PIQEvXubBUiu4tCV5IN6Kv2AS885S9GPhpBh"
 
 # link = url1 + date + url2 + date + url3 + api
@@ -27,7 +27,6 @@ years<-str_pad(2019:2023, width=4, side="left", pad="0")
 months<-str_pad(1:12, width=2, side="left", pad="0")
 days_per_month<-c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
-#test query
 y<-1
 m<-1
 d<-1
@@ -45,6 +44,16 @@ raw_json <- fromJSON(file = "2019-01-01.json")
 eia_json_df <- raw_json$response$data
 eia_df <- as.data.frame(do.call(rbind, eia_json_df))
 eia_df$respondent <- unlist(eia_df$respondent)
+
+date_seq_base <- seq(as.Date("2019-01-01"),
+                     as.Date("2023-12-31"),
+                     by = "days")
+print(date_seq_base)
+
+
+for(i in 1:length(dates)) {
+  print(date_seq_base)
+}
 
 for (y in 1:length(years)) {
   for (m in 1:length(months)) {
@@ -75,3 +84,4 @@ for (y in 1:length(years)) {
     resp <- GET(link, write_disk(filename, overwrite = TRUE), progress())
   }
 }
+
