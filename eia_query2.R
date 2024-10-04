@@ -58,7 +58,7 @@ date_seq_base <- seq(as.Date("2019-01-01"),
 
 i<-1
 for (i in 1:length(date_seq_base)) {
-
+ 
       print(date_seq_base[i])
 
       link<-paste0(url1, date_seq_base[i], url2, date_seq_base[i+1], url3, api)

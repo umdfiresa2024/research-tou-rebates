@@ -1,71 +1,209 @@
 # PUT PATH TO GOOGLE DRIVE HERE
-gdrive_path <-
-  "/Users/vsrivastava/Library/CloudStorage/GoogleDrive-vsriv81@terpmail.umd.edu"
 
 # init packages
 library("rjson")
 library("tidyverse")
 
-# set working directory to /DATA/
-data_dir <- paste0(
-  gdrive_path,
-  "/Shared drives/2023 FIRE-SA/FALL OUTPUT/Team EV Electric Grid/DATA/"
-)
-setwd(data_dir)
 
-# read in respondent-nerc match csv
-nerc_match <- read.csv("respondent-nerc-match.csv")
+setwd("~/Library/CloudStorage/GoogleDrive-sselvaku@terpmail.umd.edu/Shared drives/2024 FIRE-SA/DATA/EIA")
 
-# set working directory to location of EIA BA JSON
-json_dir <- paste0(
-  data_dir,
-  "/EIA-BA-JSON"
-)
-setwd(json_dir)
+date_seq_base <- seq(as.Date("2019-01-02"),
+                     as.Date("2020-01-01"),
+                     by = "days")
+url2<- "T00"
 
-# files to clean+merge
-filelist <- c(
-  list.files(pattern = "^2020.*\\.json$"),
-  list.files(pattern = "^2021.*\\.json$"),
-  list.files(pattern = "^2022.*\\.json$")
-)
+date_del<-paste0(date_seq_base, url2)
 
-# create empty frame to hold all matched data
-eia_nerc_complete <- data.frame(matrix(
-  ncol = 9,
-  nrow = 0
-))
+filelist <-  list.files(pattern = "2019")
 
-max <- length(filelist)
+output<-c()
 
-for (i in 1:max) {
+for (i in 1:length(filelist)) {
   print(i)
-
+  
   # read in eia json
   raw_json <- fromJSON(file = filelist[i])
 
   # convert json to a spreadsheet
   eia_json_df <- raw_json$response$data
   eia_df <- as.data.frame(do.call(rbind, eia_json_df))
-  eia_df$respondent <- unlist(eia_df$respondent)
-
-  # merge json with nerc regions
-  eia_nerc_df <- merge(
-    x = eia_df,
-    y = nerc_match,
-    by = "respondent",
-    all.x = TRUE
-  )
-
-  # append to output data frame
-  eia_nerc_complete <- rbind(eia_nerc_complete, eia_nerc_df)
+  #eia_df$respondent <- unlist(eia_df$respondent)
+  
+  eia_df2<- eia_df %>%
+    filter(period!=date_del[i]) %>%
+    select(-parent, -`parent-name`, -`value-units`) %>%
+    mutate(period=as.character(period)) %>%
+    mutate(value=as.numeric(value)) %>%
+    mutate(subba=as.character(subba)) %>%
+    mutate(`subba-name`=as.character(`subba-name`)) 
+  
+  output<-rbind(output, eia_df2)
 }
 
-# aggregate eia data by hour and nerc region
-nerc_aggregate <- eia_nerc_complete %>%
-  group_by(nerc.region, period) %>%
-  summarize(demand.mwh = sum(unlist(value)))
+write.csv(output, 
+          "~/Library/CloudStorage/GoogleDrive-sselvaku@terpmail.umd.edu/Shared drives/2024 FIRE-SA/DATA/EIA2/eia_2019.csv",
+          row.names = F)
 
-setwd(substr(json_dir, 1, nchar(json_dir) - 15))
-nerc_aggregate$period <- unlist(nerc_aggregate$period)
-write_csv(nerc_aggregate, "eia_nerc_aggregate.csv")
+##2020
+#skip i = 270, i = 273
+date_seq_base <- seq(as.Date("2020-01-02"),
+                     as.Date("2021-01-01"),
+                     by = "days")
+url2<- "T00"
+
+date_del<-paste0(date_seq_base, url2)
+filelist <-  list.files(pattern = "2020")
+
+output<-c()
+
+for (i in 274:length(filelist)) {
+  print(i)
+  
+  # read in eia json
+  raw_json <- fromJSON(file = filelist[i])
+  
+  # convert json to a spreadsheet
+  eia_json_df <- raw_json$response$data
+  eia_df <- as.data.frame(do.call(rbind, eia_json_df))
+  #eia_df$respondent <- unlist(eia_df$respondent)
+  
+  eia_df2<- eia_df %>%
+    filter(period!=date_del[i]) %>%
+    select(-parent, -`parent-name`, -`value-units`) %>%
+    mutate(period=as.character(period)) %>%
+    mutate(value=as.numeric(value)) %>%
+    mutate(subba=as.character(subba)) %>%
+    mutate(`subba-name`=as.character(`subba-name`)) 
+  
+  output<-rbind(output, eia_df2)
+}
+
+write.csv(output, 
+          "~/Library/CloudStorage/GoogleDrive-sselvaku@terpmail.umd.edu/Shared drives/2024 FIRE-SA/DATA/EIA2/eia_2020.csv",
+          row.names = F)
+
+##2021
+date_seq_base <- seq(as.Date("2021-01-02"),
+                     as.Date("2022-01-01"),
+                     by = "days")
+url2<- "T00"
+
+date_del<-paste0(date_seq_base, url2)
+filelist <-  list.files(pattern = "2021")
+
+output<-c()
+#skip i = 259
+for (i in 260:length(filelist)) {
+  print(i)
+  
+  # read in eia json
+  raw_json <- fromJSON(file = filelist[i])
+  
+  # convert json to a spreadsheet
+  eia_json_df <- raw_json$response$data
+  eia_df <- as.data.frame(do.call(rbind, eia_json_df))
+  #eia_df$respondent <- unlist(eia_df$respondent)
+  
+  eia_df2<- eia_df %>%
+    filter(period!=date_del[i]) %>%
+    select(-parent, -`parent-name`, -`value-units`) %>%
+    mutate(period=as.character(period)) %>%
+    mutate(value=as.numeric(value)) %>%
+    mutate(subba=as.character(subba)) %>%
+    mutate(`subba-name`=as.character(`subba-name`)) 
+  
+  output<-rbind(output, eia_df2)
+}
+
+write.csv(output, 
+          "~/Library/CloudStorage/GoogleDrive-sselvaku@terpmail.umd.edu/Shared drives/2024 FIRE-SA/DATA/EIA2/eia_2021.csv",
+          row.names = F)
+
+##2022
+date_seq_base <- seq(as.Date("2022-01-02"),
+                     as.Date("2023-01-01"),
+                     by = "days")
+url2<- "T00"
+
+date_del<-paste0(date_seq_base, url2)
+filelist <-  list.files(pattern = "2022")
+
+output<-c()
+
+for (i in 1:length(filelist)) {
+  print(i)
+  
+  # read in eia json
+  raw_json <- fromJSON(file = filelist[i])
+  
+  # convert json to a spreadsheet
+  eia_json_df <- raw_json$response$data
+  eia_df <- as.data.frame(do.call(rbind, eia_json_df))
+  #eia_df$respondent <- unlist(eia_df$respondent)
+  
+  eia_df2<- eia_df %>%
+    filter(period!=date_del[i]) %>%
+    select(-parent, -`parent-name`, -`value-units`) %>%
+    mutate(period=as.character(period)) %>%
+    mutate(value=as.numeric(value)) %>%
+    mutate(subba=as.character(subba)) %>%
+    mutate(`subba-name`=as.character(`subba-name`)) 
+  
+  output<-rbind(output, eia_df2)
+}
+
+write.csv(output, 
+          "~/Library/CloudStorage/GoogleDrive-sselvaku@terpmail.umd.edu/Shared drives/2024 FIRE-SA/DATA/EIA2/eia_2022.csv",
+          row.names = F)
+##2023
+date_seq_base <- seq(as.Date("2023-01-02"),
+                     as.Date("2024-01-01"),
+                     by = "days")
+url2<- "T00"
+
+date_del<-paste0(date_seq_base, url2)
+filelist <-  list.files(pattern = "2023")
+
+output<-c()
+
+for (i in 1:length(filelist-1)) {
+  print(i)
+  
+  # read in eia json
+  raw_json <- fromJSON(file = filelist[i])
+  
+  # convert json to a spreadsheet
+  eia_json_df <- raw_json$response$data
+  eia_df <- as.data.frame(do.call(rbind, eia_json_df))
+  #eia_df$respondent <- unlist(eia_df$respondent)
+  
+  eia_df2<- eia_df %>%
+    filter(period!=date_del[i]) %>%
+    select(-parent, -`parent-name`, -`value-units`) %>%
+    mutate(period=as.character(period)) %>%
+    mutate(value=as.numeric(value)) %>%
+    mutate(subba=as.character(subba)) %>%
+    mutate(`subba-name`=as.character(`subba-name`)) 
+  
+  output<-rbind(output, eia_df2)
+}
+
+raw_json <- fromJSON(file = filelist[365])
+
+# convert json to a spreadsheet
+eia_json_df <- raw_json$response$data
+eia_df <- as.data.frame(do.call(rbind, eia_json_df))
+#eia_df$respondent <- unlist(eia_df$respondent)
+
+eia_df2<- eia_df %>%
+  select(-parent, -`parent-name`, -`value-units`) %>%
+  mutate(period=as.character(period)) %>%
+  mutate(value=as.numeric(value)) %>%
+  mutate(subba=as.character(subba)) %>%
+  mutate(`subba-name`=as.character(`subba-name`)) 
+
+output<-rbind(output, eia_df2)
+
+write.csv(output, 
+          "~/Library/CloudStorage/GoogleDrive-sselvaku@terpmail.umd.edu/Shared drives/2024 FIRE-SA/DATA/EIA2/eia_2023.csv",
+          row.names = F)
