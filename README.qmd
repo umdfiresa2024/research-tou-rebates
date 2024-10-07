@@ -23,7 +23,7 @@ Step 3. Upload the dataframe that you have created in Spring 2024 into the repos
 Step 4. Open the dataframe into the RStudio Environment.
 
 ```{r}
-df<-read.csv("data.csv")
+df<-read.csv("panel.csv")
 ```
 
 Step 5. Use the **head** and **kable** function showcase the first 10 rows of the dataframe to the reader.
@@ -34,16 +34,43 @@ kable(head(df))
 
 ## Question 1: What is the frequency of this data frame?
 
-Answer:
+Answer: hourly
 
 ## Question 2: What is the cross-sectional (geographical) unit of this data frame?
 
-Answer:
+Answer: Electric company
 
 Step 6. Use the **names** function to display all the variables (column) in the dataframe.
 
 ```{r}
-names(df)
+names(df) 
+
+df2<-df %>%
+  mutate(date=as.Date(date), dow=weekdays(date)) %>%
+  mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
+                              year>=2021 & (month>=6 & month<=9) & (hour>=10 & hour<=20), 
+                            1, 0)) %>%
+    mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
+                              year>=2021 & (month>=10) & (hour>=7 & hour<=11), 
+                            1, BGE_rebate)) %>%
+      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
+                              year>=2021 & (month<=5) & (hour>=7 & hour<=11), 
+                            1, BGE_rebate)) %>%
+      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
+                              year>=2021 & (month>=10) & (hour>=17 & hour<=21), 
+                            1, BGE_rebate)) %>%
+      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
+                              year>=2021 & (month<=5) & (hour>=17 & hour<=21), 
+                            1, BGE_rebate)) 
+  # mutate(Delmarva_rebate=ifelse(subba.name=="Delmarva Power null zone - PJM" & 
+  #                             year>=2019 & (month>=9) & (hour>=12 & hour<=20), 
+  #                           1, Delmarva_rebate)) %>%
+  # mutate(PECO_rebate=ifelse(subba.name=="PECO Energy zone - PJM" & 
+  #                             year>=2022 & (month>=11) & (hour>=12 & hour<=20) & (dow == "Monday" & dow == "Tuesday" & dow == "Wednesday" & dow == "Thursday" & dow=="Friday"), 
+  #                           1, PECO_rebate)) %>%
+  # mutate(Potomac_rebate=ifelse(subba.name=="Potomac Electric Power zone - PJM" & 
+  #                             year>=2020 & (month>=1) & (hour>=7 & hour<=20), 
+  #                           1, Potomac_rebate))
 
 ```
 
