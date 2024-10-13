@@ -7,8 +7,8 @@ editor: visual
 Step 1. Install necessary packages.
 
 ```{r}
-install.packages("tidyverse")
-install.packages("kableExtra")
+#install.packages("tidyverse")
+#install.packages("kableExtra")
 ```
 
 Step 2. Declare that you will use these packages in this session.
@@ -34,57 +34,51 @@ kable(head(df))
 
 ## Question 1: What is the frequency of this data frame?
 
-Answer: hourly
+Answer:hourly
 
 ## Question 2: What is the cross-sectional (geographical) unit of this data frame?
 
-Answer: Electric company
+Answer:Electric company
 
 Step 6. Use the **names** function to display all the variables (column) in the dataframe.
 
 ```{r}
 names(df) 
 
-df2<-df %>%
-  mutate(date=as.Date(date), dow=weekdays(date)) %>%
-  mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
-                              year>=2021 & (month>=6 & month<=9) & (hour>=10 & hour<=20), 
-                            1, 0)) %>%
-    mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
-                              year>=2021 & (month>=10) & (hour>=7 & hour<=11), 
-                            1, BGE_rebate)) %>%
-      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
-                              year>=2021 & (month<=5) & (hour>=7 & hour<=11), 
-                            1, BGE_rebate)) %>%
-      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
-                              year>=2021 & (month>=10) & (hour>=17 & hour<=21), 
-                            1, BGE_rebate)) %>%
-      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & 
-                              year>=2021 & (month<=5) & (hour>=17 & hour<=21), 
-                            1, BGE_rebate)) 
-  # mutate(Delmarva_rebate=ifelse(subba.name=="Delmarva Power null zone - PJM" & 
-  #                             year>=2019 & (month>=9) & (hour>=12 & hour<=20), 
-  #                           1, Delmarva_rebate)) %>%
-  # mutate(PECO_rebate=ifelse(subba.name=="PECO Energy zone - PJM" & 
-  #                             year>=2022 & (month>=11) & (hour>=12 & hour<=20) & (dow == "Monday" & dow == "Tuesday" & dow == "Wednesday" & dow == "Thursday" & dow=="Friday"), 
-  #                           1, PECO_rebate)) %>%
-  # mutate(Potomac_rebate=ifelse(subba.name=="Potomac Electric Power zone - PJM" & 
-  #                             year>=2020 & (month>=1) & (hour>=7 & hour<=20), 
-  #                           1, Potomac_rebate))
+intsub<-c("Baltimore Gas null zone - PJM", 
+          "Delmarva Power null zone - PJM", 
+          "Potomac Electric Power zone - PJM")
 
+df2<-df %>%
+   mutate(date=as.Date(date), dow=weekdays(date)) %>%
+  mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & year>=2021 & (month>=6 & month<=9) & (hour>=10 & hour<=20),
+                            1, 0)) %>%
+    mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & year>=2021 & (month>=10) & (hour>=7 & hour<=11),1, BGE_rebate)) %>%
+      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & year>=2021 & (month<=5) & (hour>=7 & hour<=11),1, BGE_rebate)) %>%
+      mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" & year>=2021 & (month>=10) & (hour>=17 & hour<=21),1, BGE_rebate)) %>%
+    mutate(BGE_rebate=ifelse(subba.name=="Baltimore Gas null zone - PJM" &year>=2021 & (month<=5) & (hour>=17 & hour<=21),1, BGE_rebate)) %>%
+   mutate(Delmarva_rebate=ifelse(subba.name=="Delmarva Power null zone - PJM" &date>as.Date("2019-11-01") & (hour>=12 & hour<=20) & (dow == "Monday" | dow == "Tuesday" | dow == "Wednesday" |dow == "Thursday" | dow=="Friday"),1, 0)) %>%
+   mutate(Potomac_rebate=ifelse(subba.name=="Potomac Electric Power zone - PJM" & year>=2020  & (hour>=7 & hour<=20),1, 0)) %>%
+  mutate(subba.name=ifelse(subba.name %in% intsub, subba.name, "Other")) %>%
+  group_by(subba.name, hour, month, year, date, dow, BGE_rebate, Delmarva_rebate, Potomac_rebate) %>%
+summarise(value=sum(value, rm.na=TRUE))
+  
+
+#write.csv(df2, "panel.csv", row.names = F)  
 ```
 
 ## Question 3: Which column represents the treatment variable of interest?
 
-Answer:
+Answer: BGE_rebate, Delmarva_rebate, Potomac_rebate
 
 ## Question 4: Which column represents the outcome variable of interest?
 
-Answer:
+Answer: value (which represents energy consumption in Mw)
 
 Step 7: Create a boxplot to visualize the distribution of the outcome variable under treatment and no treatment.
 
 ```{r}
+#| eval: false
 ggplot(df, aes(x=nox_emit)) +
   geom_histogram() +
   facet_wrap(~nbp)
@@ -93,7 +87,8 @@ ggplot(df, aes(x=nox_emit)) +
 Step 8: Fit a regression model $y=\beta_0 + \beta_1 x + \epsilon$ where $y$ is the outcome variable and $x$ is the treatment variable. Use the **summary** function to display the results.
 
 ```{r}
-model1<-lm(nox_emit ~ nbp, data=df)
+model1<-lm(value ~ BGE_rebate + Delmarva_rebate + Potomac_rebate + as.factor(dow) + 
+             as.factor(hour) + as.factor(month) + as.factor(month):as.factor(hour), data=df2)
 
 summary(model1)
 ```
