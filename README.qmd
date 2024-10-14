@@ -40,6 +40,10 @@ Answer:hourly
 
 Answer:Electric company
 
+```{r}
+table(df$subba.name)
+```
+
 Step 6. Use the **names** function to display all the variables (column) in the dataframe.
 
 ```{r}
@@ -79,9 +83,27 @@ Step 7: Create a boxplot to visualize the distribution of the outcome variable u
 
 ```{r}
 #| eval: false
-ggplot(df, aes(x=nox_emit)) +
-  geom_histogram() +
-  facet_wrap(~nbp)
+
+df_long <- df2 %>%
+  pivot_longer(cols = c(BGE_rebate, Delmarva_rebate, Potomac_rebate),
+               names_to = "rebate_type",
+               values_to = "rebate_status")
+
+# Create the box plot
+ggplot(df_long %>% filter(rebate_status == 1), aes(x = rebate_type, y = value, fill = rebate_type)) +
+  geom_boxplot() +
+  labs(title = "Energy Consumption by Rebate Type", 
+       x = "Rebate Type", 
+       y = "Energy Consumption (Mw)") +
+  theme_minimal()
+
+
+
+#ggplot(df2, aes(x=)) +
+  #geom_histogram() +
+  #facet_wrap(~nbp)
+
+#boxplot(df$)
 ```
 
 Step 8: Fit a regression model $y=\beta_0 + \beta_1 x + \epsilon$ where $y$ is the outcome variable and $x$ is the treatment variable. Use the **summary** function to display the results.
