@@ -1,5 +1,5 @@
 ---
-title: "Research Question"
+title: "What is the impact of EV TOU Rebate on EV Sales in Maryland"
 format: gfm
 editor: visual
 ---
@@ -7,6 +7,8 @@ editor: visual
 Step 1. Install necessary packages.
 
 ```{r}
+#| message: false
+#| warning: false
 #install.packages("tidyverse")
 #install.packages("kableExtra")
 ```
@@ -14,6 +16,8 @@ Step 1. Install necessary packages.
 Step 2. Declare that you will use these packages in this session.
 
 ```{r}
+#| message: false
+#| warning: false
 library("tidyverse")
 library("kableExtra")
 ```
@@ -34,14 +38,14 @@ kable(head(df))
 
 ## Question 1: What is the frequency of this data frame?
 
-Answer:hourly
+Answer: monthly
 
 ## Question 2: What is the cross-sectional (geographical) unit of this data frame?
 
-Answer:Electric company
+Answer: Electric company
 
 ```{r}
-table(df$subba.name)
+table(df$Company)
 ```
 
 Step 6. Use the **names** function to display all the variables (column) in the dataframe.
