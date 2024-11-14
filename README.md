@@ -91,6 +91,10 @@ names(df)
 The treatment variable of interest is TOU Time x BGE and the outcome
 variable of interest is EVs.
 
+Map of Pepco and BGE:
+
+![](map.png)
+
 A boxplot that visualizes the distribution of the outcome variable under
 treatment and no treatment.
 
@@ -211,6 +215,8 @@ Answer: 6332 EVs
 # Questions for Week 5
 
 ## Question 10: What are the next steps of your research?
+
+![](images/causal_graph.png)
 
 Take into account-
 
