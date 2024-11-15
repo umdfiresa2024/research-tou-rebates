@@ -42,15 +42,22 @@ will consider factors such as gas prices, which may further influence EV
 adoption. Thus, our study aims to provide a more localized analysis of
 Maryland’s TOU rebates and their effect on EV sales.
 
+This code installs all the necessary packages:
+
 ``` r
 #install.packages("tidyverse")
 #install.packages("kableExtra")
 ```
 
+These are the packages we will be using:
+
 ``` r
 library("tidyverse")
 library("kableExtra")
 ```
+
+This code is opening the csv file and storing the contents in a
+dataframe df.
 
 ``` r
 df<-read.csv("panel.csv")
@@ -71,8 +78,13 @@ kable(head(df))
 | 2020-09-01 | Baltimore Gas & Electric Co | 11257 |           0 |
 | 2020-09-01 | Potomac Electric Power Co   |  8464 |           0 |
 
+**Data description:**
+
 The frequency of the data frame is monthly and the cross-sectional
 (geographical) unit is electric company.
+
+The below code shows the two electric companies that we will focusing
+on:
 
 ``` r
 table(df$Company)
@@ -81,6 +93,8 @@ table(df$Company)
 
     Baltimore Gas & Electric Co   Potomac Electric Power Co 
                              50                          50 
+
+The below code displays all the variables (column) in the dataframe:
 
 ``` r
 names(df) 
@@ -91,12 +105,12 @@ names(df)
 The treatment variable of interest is TOU Time x BGE and the outcome
 variable of interest is EVs.
 
-Map of Pepco and BGE:
+Here is a map of Pepco and BGE:
 
 ![](map.png)
 
-A boxplot that visualizes the distribution of the outcome variable under
-treatment and no treatment.
+Below is a boxplot that visualizes the distribution of the outcome
+variable under treatment and no treatment.
 
 ``` r
 ggplot(df, aes(x=as.Date(Date), y=EVs, col=Company)) + geom_line() +
@@ -108,8 +122,9 @@ ggplot(df, aes(x=as.Date(Date), y=EVs, col=Company)) + geom_line() +
 ![](README_files/figure-commonmark/unnamed-chunk-7-1.png)
 
 The regression model $y=\beta_0 + \beta_1 x + \epsilon$ where $y$ is the
-outcome variable and $x$ is the treatment variable. Below are our
-results:
+outcome variable and $x$ is the treatment variable.
+
+Below are our results:
 
 ``` r
 df2<-df %>%
@@ -191,54 +206,65 @@ summary(model1)
     Multiple R-squared:  0.9752,    Adjusted R-squared:  0.9488 
     F-statistic: 36.95 on 51 and 48 DF,  p-value: < 2.2e-16
 
-## Question 5: What is the predicted value of the outcome variable when treatment=0?
-
-Answer: 7900
-
-## Question 6: What is predicted value of the outcome variable when treatment=1?
-
-Answer: 7900 + 27954 + 3223 + 6332 = 45,419
-
-## Question 7: What is the equation that describes the linear regression above? Please include an explanation of the variables and subscripts.
-
-Answer:
+The equation that describes the linear regression is
 $ev_{ct} = \beta_0 + \beta_1 TOUTime_{t} + \beta_2 BGE_{c} + \beta3TOU_{c}*BGE_{t} + \alpha_{Date} + \epsilon_{ct}$
 
-## Question 8: What fixed effects can be included in the regression? What does each fixed effects control for? Please include a new equation that incorporates the fixed effects.
+Let’t say we want to calculate the predicted value of the outcome
+variable when treatment = 1. Using the equation:
 
-Answer: Date fix effects
+EV Sales = intercept (7900) + TOU_time (27954)+ BGE (3233) + TOU_time
+(6332) = 45,419
 
-## Question 9: What is the impact of the treatment effect once fixed effects are included?
+**Discussion of our results:**
 
-Answer: 6332 EVs
+Our research on Maryland’s Time-of-Use (TOU) rebate program reveals that
+TOU rebates significantly contributed to the growth of electric vehicle
+(EV) sales in the state. From mid-2021 to late 2023, TOU rebates were
+directly responsible for the sale of approximately 6,000 EVs,
+representing nearly 14% of the 45,000 EVs sold during this period.
 
-# Questions for Week 5
+ A comparative analysis using box plots demonstrated a notable
+difference in EV sales with and without TOU rebates: sales doubled from
+5,000 to 10,000 when TOU rebates were applied. 
 
-## Question 10: What are the next steps of your research?
+This clear contrast underscores the effectiveness of TOU rebates in
+increasing EV adoption by reducing operational costs. Maryland
+policymakers can leverage these insights to enhance rebate programs,
+potentially setting a precedent for similar initiatives in other regions
+to drive EV adoption and support emission reduction goals.
+
+**Future plans for the project:**
+
+1.  **Analyze the Impact of Gas Price Differences on EV Sales:**
+    Investigate how fluctuations in gas prices between different fuel
+    companies influence EV sales, potentially highlighting how rising
+    gas prices may further encourage EV adoption among consumers.
+2.  **Compare Used Car Prices in Different Regions:** Examine the
+    variation in used car prices between the Potomac and Baltimore areas
+    to understand regional price disparities and how these might affect
+    consumer decisions between purchasing EVs versus traditional
+    vehicles.
+3.  **Assess Pre-July 2021 EV Dealership Sales Trends:** Conduct a
+    historical analysis of EV sales trends at dealerships before July
+    2021 to identify patterns or shifts in consumer interest and
+    evaluate if early adoption behaviors differ from recent trends
+    influenced by TOU rebates.
+
+**Causal graph:**
 
 ![](images/causal_graph.png)
 
-Take into account-
-
-1.  difference in gas prices between both companies
-2.  difference in used car prices between Potomac area and Baltimore
-    area
-3.  EV dealerships being before July 2021
-
-Step 9: Change the document format to gfm
-
-Step 10: Save this document as README.qmd
-
-Step 11: Render the document. README.md file should be created after
-this process.
-
-Step 12: Push the document back to GitHub and observe your beautiful
-document in your repository!
-
-Step 13: If your team has a complete dataframe that includes both the
-treated and outcome variable, you are done with the assignment. If not,
-make a research plan in Notion to collect data on the outcome and
-treatment variable and combine it into one dataframe.
+Here, our project mainly considered the impact (and therefore government
+incentives) on EV Sales. However, there were some other factors that
+impact EV Sales that we can incorporate into future studies as well.
+Situations involving gas prices and EV dealership availability across
+counties heavily impact consumer behavior, which ultimately is another
+very important factor when considering EV sales. Furthermore, we haven’t
+completely explored the other effects of government incentives in
+relation to EV sales. Government policies on dealership availability
+(during the COVID period) and charging infrastructure availability also
+impact EV sales. In the future, looking deeper into these elements and
+how they impact each other can help us better understand EV sales.
 
 # Bibliography
 
@@ -249,3 +275,11 @@ https://www.nber.org/papers/w32886
 Maryland Clean Cars Program. (n.d.). *Department of the Environment*.
 Retrieved November 4, 2024, from
 http://mde.maryland.gov/programs/Air/MobileSources/Pages/CleanCars.aspx
+
+Hughes, W. K., Williams, H. D., Mills, J. M., Richard, M. T., O’Donnell,
+A. J., Maryland Public Service Commission, & Commission’s Energy
+Analysis and Planning Division. (2016). Ten-Year Plan (2016 – 2025) of
+electric companies in Maryland. In Maryland Department of Natural
+Resources & Maryland Public Service Commission, *Maryland Department of
+Natural Resources*.
+https://www.psc.state.md.us/wp-content/uploads/Final-2016_2025_TYP-12_8_16.pdf
