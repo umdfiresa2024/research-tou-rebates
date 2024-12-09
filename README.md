@@ -30,7 +30,7 @@ off-peak hours, making EVs more affordable. However, the study
 highlights some issues; for instance, higher-income households are more
 likely to own EVs and thus benefit more from the pricing incentive.
 
-While the NBER study provides insights into how TOU pricing works in
+While the Bailey et al. (2024) study provides insights into how TOU pricing works in
 general, it does not focus on specific states, such as Maryland. Our
 research addresses this gap by examining how Maryland’s TOU rebate
 program impacts EV sales within the state. By focusing on Maryland, we
