@@ -23,11 +23,9 @@ emissions, and advancement of clean energy goals nationwide.
 Many states, like Maryland, strive to reduce emissions from the
 transportation sector. To accelerate EV adoption, one policy approach is
 the implementation of Time-of-Use (TOU) rebates. Significant research,
-such as Electric Vehicles and the Energy Transition: Unintended
-Consequences of a Common Retail Rate Design by the National Bureau of
-Economic Research (NBER, 2024), discusses the implications of
-electricity rate designs—particularly TOU rates—on EV adoption. The NBER
-study finds that TOU rates can incentivize EV owners to charge during
+such as Bailey et al. (2024), discusses the implications of
+electricity rate designs—particularly TOU rates—on EV adoption. Bailey et al. (2024)
+find that TOU rates can incentivize EV owners to charge during
 off-peak hours, making EVs more affordable. However, the study
 highlights some issues; for instance, higher-income households are more
 likely to own EVs and thus benefit more from the pricing incentive.
@@ -37,7 +35,7 @@ general, it does not focus on specific states, such as Maryland. Our
 research addresses this gap by examining how Maryland’s TOU rebate
 program impacts EV sales within the state. By focusing on Maryland, we
 can better assess whether the rebate program is effectively helping
-residents adopt EVs. Additionally, unlike the NBER study, our research
+residents adopt EVs. Additionally, unlike Bailey et al. (2024), our research
 will consider factors such as gas prices, which may further influence EV
 adoption. Thus, our study aims to provide a more localized analysis of
 Maryland’s TOU rebates and their effect on EV sales.
@@ -81,7 +79,11 @@ kable(head(df))
 # Data Description
 
 The frequency of the data frame is monthly and the cross-sectional
-(geographical) unit is electric company.
+(geographical) unit is electric company. 
+
+The treated group consists of electric vehicle (EV) sales associated with the Baltimore Gas & Electric Co. (BGE) during the Time-of-Use (TOU) rebate period starting July 2021. These sales are impacted by the implementation of the TOU rebate. The untreated group includes EV sales under both the Baltimore Gas & Electric Co. (BGE) and Potomac Electric Power Co. (Pepco) before the TOU rebate period, and those for Pepco throughout the study, as they were not subject to the TOU rebate during the treatment window.
+
+The dataset used in this study includes monthly records from two major electric companies in Maryland—Baltimore Gas & Electric Co (BGE) and Potomac Electric Power Co (Pepco). BGE is subject to a Time-of-Use (TOU) pricing structure, which incentivizes electric vehicle (EV) owners to charge during off-peak hours when electricity is cheaper. This TOU pricing mechanism effectively lowers operational costs for EVs and helps manage grid demand. In contrast, Pepco does not offer a TOU pricing plan, allowing for a comparison between regions with and without such incentives. By differentiating between these pricing models, the study can assess the impact of TOU rebates on EV adoption across different electric facilities in Maryland.
 
 The below code shows the two electric companies that we will focusing
 on:
@@ -270,9 +272,9 @@ how they impact each other can help us better understand EV sales.
 
 # Bibliography
 
-Electric Vehicles and the Energy Transition: Unintended Consequences of
-a Common Retail Rate Design \| NBER. (2024). *NBER*.
-https://www.nber.org/papers/w32886
+Bailey, M. R., Brown, D. P., Myers, E., Shaffer, B. C., & Wolak, F. A. (2024).
+Electric vehicles and the energy transition: Unintended consequences of a common retail rate design (Working Paper No. 32886). 
+National Bureau of Economic Research. https://www.nber.org/papers/w32886
 
 Maryland Clean Cars Program. (n.d.). *Department of the Environment*.
 Retrieved November 4, 2024, from
