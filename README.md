@@ -1,5 +1,5 @@
 # What is the impact of EV TOU Rebate on EV Sales in Maryland
-
+# Shyam Polisetty, Sangeetha Sree Selva Kumar, Santiago Castro-Luna
 
 # Introduction
 
